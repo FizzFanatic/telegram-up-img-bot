@@ -1,0 +1,5 @@
+fastapi~=0.115.4
+uvicorn
+aiogram~=3.14.0
+psycopg2-binary
+python-dotenv~=1.0.1
