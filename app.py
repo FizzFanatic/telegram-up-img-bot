@@ -20,7 +20,7 @@ def start(message):
 def webhook():
     update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
     bot.process_new_updates([update])
-    print("WebHook received")  # Проверка на получение запроса
+    print("WebHook получен")  # Проверка на получение запроса
     return 'ok', 200
 
 
