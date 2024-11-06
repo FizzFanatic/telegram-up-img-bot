@@ -1,7 +1,10 @@
 import telebot
 from flask import Flask, request
+from psycopg2 import connect
+
 import config  # файл конфигурации с настройками
 from telebot import types
+import database
 
 
 # Инициализация бота
@@ -12,8 +15,11 @@ app = Flask(__name__)
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def start(message):
-    print(message)
-    bot.reply_to(message, "Привет! Я твой бот и готов к работе!")
+    connection = database.get_db_connection()
+    if connection:
+        bot.reply_to(message, "Бот успешно связался с базой данных")
+    else:
+        bot.reply_to(message, "Ошибка")
 
 
 # Обработка вебхука от Telegram
