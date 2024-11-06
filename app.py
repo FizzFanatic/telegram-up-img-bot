@@ -20,10 +20,11 @@ def start(message):
 
 
 # Обработка вебхука от Telegram
-@app.route('/webhook_update' + config.WEBHOOK_URL, methods=['POST'])
+@app.route(f'/webhook_update/{config.SECRET_PATH}', methods=['POST'])
 def webhook():
     update = telebot.types.Update.de_json(request.stream.read().decode('utf-8'))
     bot.process_new_updates([update])
+    print("WebHook received")  # Проверка на получение запроса
     return 'ok', 200
 
 # # Запуск приложения
