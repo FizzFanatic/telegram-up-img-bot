@@ -2,7 +2,6 @@ import telebot
 from flask import Flask, request
 import config  # файл конфигурации с настройками
 from telebot import types
-import psycopg2
 
 # Инициализация бота
 bot = telebot.TeleBot(config.Token, threaded=False)
@@ -12,14 +11,6 @@ app = Flask(__name__)
 # Установка вебхука
 bot.remove_webhook()
 bot.set_webhook(url=config.WEBHOOK_URL + config.SECRET_PATH)
-
-# Подключение к базе данных PostgreSQL
-try:
-    conn = psycopg2.connect(config.url_database_telegram)
-    cursor = conn.cursor()
-    print("Подключение к PostgreSQL успешно!")
-except Exception as e:
-    print("Ошибка при подключении к базе данных:", e)
 
 
 # Обработчик команды /start
