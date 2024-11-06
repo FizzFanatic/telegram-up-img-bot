@@ -15,11 +15,13 @@ app = Flask(__name__)
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def start(message):
-    connection = database.get_db_connection()
-    if connection:
-        bot.reply_to(message, "Бот успешно связался с базой данных")
+    telegram_id = message.from_user.id  # Получаем ID пользователя Telegram
+
+    if database.add_user_to_db(telegram_id):
+        message_text = "Вы успешно зарегистрированы!\n\nВам начислено 5 кредитов за первое вступление.\n\n"
+        bot.reply_to(message, message_text)
     else:
-        bot.reply_to(message, "Ошибка")
+        bot.reply_to(message, "Вы уже зарегистрированы.\nГлавное меню.")
 
 
 # Обработка вебхука от Telegram
