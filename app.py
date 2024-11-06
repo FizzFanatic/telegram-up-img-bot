@@ -1,11 +1,10 @@
 import telebot
 from flask import Flask, request
-from psycopg2 import connect
 
 import config  # файл конфигурации с настройками
-from telebot import types
 import database
 
+from modules import keyboard
 
 # Инициализация бота
 bot = telebot.TeleBot(config.Token, threaded=False)
@@ -19,9 +18,10 @@ def start(message):
 
     if database.add_user_to_db(telegram_id):
         message_text = "Вы успешно зарегистрированы!\n\nВам начислено 5 кредитов за первое вступление.\n\n"
-        bot.reply_to(message, message_text)
+        bot.reply_to(message, message_text, reply_markup=keyboard.create_main_menu())
     else:
-        bot.reply_to(message, "Вы уже зарегистрированы.\nГлавное меню.")
+        message_text = "Вы уже зарегистрированы.\nГлавное меню."
+        bot.reply_to(message, message_text, reply_markup=keyboard.create_main_menu())
 
 
 # Обработка вебхука от Telegram
