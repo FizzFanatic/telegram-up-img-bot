@@ -12,6 +12,7 @@ app = Flask(__name__)
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def start(message):
+    print(message)
     bot.reply_to(message, "Привет! Я твой бот и готов к работе!")
 
 
