@@ -24,6 +24,18 @@ def start(message):
         bot.reply_to(message, message_text, reply_markup=keyboard.create_main_menu())
 
 
+# Обработчик кнопки "Аккаунт"
+@bot.message_handler(func=lambda message: message.text == "Аккаунт")
+def show_account_info(message):
+    telegram_id = message.from_user.id  # Получаем ID пользователя Telegram
+    balance = database.get_user_balance(telegram_id)  # Получаем баланс из базы
+
+    if balance is not None:
+        bot.reply_to(message, f"Ваш ID: {telegram_id}\nБаланс кредитов: {balance}", reply_markup=keyboard.create_main_menu())
+    else:
+        bot.reply_to(message, "Ошибка при получении данных о балансе.", reply_markup=keyboard.create_main_menu())
+
+
 # Обработка вебхука от Telegram
 @app.route(f'/webhook_update/{config.SECRET_PATH}', methods=['POST'])
 def webhook():

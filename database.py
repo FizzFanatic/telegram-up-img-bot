@@ -40,3 +40,22 @@ def add_user_to_db(telegram_id):
     finally:
         cursor.close()
         conn.close()
+
+
+# Функция для получения баланса пользователя
+def get_user_balance(telegram_id):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT account_credit_balance FROM users WHERE telegram_id = %s', (telegram_id,))
+        result = cursor.fetchone()
+        if result:
+            return result[0]  # Возвращаем баланс
+        else:
+            return None  # Пользователь не найден
+    except Exception as e:
+        print(f"Ошибка при запросе к базе данных: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
