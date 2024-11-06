@@ -1,6 +1,6 @@
 Flask==2.3.2               # Фреймворк для работы с вебхуками
 python-dotenv==1.0.0       # Для работы с переменными окружения из .env
-asyncpg                    # для подключения к PostgreSQL
+psycopg2                    # для подключения к PostgreSQL
 pyTelegramBotAPI==4.12.0   # Библиотека для работы с Telegram Bot API
 gunicorn==21.2.0           # WSGI сервер для запуска Flask-приложений
 
