@@ -3,9 +3,9 @@ from telebot import types
 # Функция для создания главного меню с кнопками
 def create_main_menu():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    button1 = types.KeyboardButton("Мои кредиты")
-    button2 = types.KeyboardButton("Улучшить фото")
-    button3 = types.KeyboardButton("Помощь")
+    button1 = types.KeyboardButton("Tools")
+    button2 = types.KeyboardButton("Аккаунт")
+    button3 = types.KeyboardButton("О боте")
     markup.add(button1, button2, button3)
     return markup
 
