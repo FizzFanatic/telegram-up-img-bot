@@ -17,8 +17,9 @@ def start(message):
     telegram_id = message.from_user.id  # Получаем ID пользователя Telegram
 
     if database.add_user_to_db(telegram_id):
-        message_text = "Вы успешно зарегистрированы!\n\nВам начислено 5 кредитов за первое вступление.\n\n"
+        message_text = "Вы успешно зарегистрированы!"
         bot.reply_to(message, message_text, reply_markup=keyboard.create_main_menu())
+        bot.send_message(message.from_user.id, f"Вам начислено {config.ADD_CREDIT_TO_START} кредитов за первое вступление.")
     else:
         message_text = "Вы уже зарегистрированы.\nГлавное меню."
         bot.reply_to(message, message_text, reply_markup=keyboard.create_main_menu())

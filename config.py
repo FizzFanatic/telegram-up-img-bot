@@ -12,3 +12,5 @@ WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 SECRET_PATH = os.getenv("SECRET_PATH")
 
 URL_DATABASE = os.getenv("URL_DATABASE")
+
+ADD_CREDIT_TO_START = 10 # одноразовый бонус за вступление

@@ -28,7 +28,7 @@ def add_user_to_db(telegram_id):
 
         if user is None:
             # Если пользователя нет в базе, добавляем нового с 5 кредитами
-            cursor.execute('INSERT INTO users (telegram_id, account_credit_balance) VALUES (%s, %s)', (telegram_id, 5))
+            cursor.execute('INSERT INTO users (telegram_id, account_credit_balance) VALUES (%s, %s)', (telegram_id, config.ADD_CREDIT_TO_START))
             conn.commit()
             return True  # Новый пользователь добавлен
         else:
