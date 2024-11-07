@@ -79,7 +79,12 @@ def handle_enhance_photo(call):
 # Обработчик callback-запросов
 @bot.callback_query_handler(func=lambda call: call.data == "back_to_menu")
 def back_to_menu(call):
+    # Удаляем предыдущее сообщение
+    bot.delete_message(call.message.chat.id, call.message.message_id)
+
+    # Отправляем новое сообщение с кнопками главного меню
     bot.send_message(call.message.chat.id, "Главное меню", reply_markup=keyboard.create_main_menu())
+
 
 
 # # Запуск приложения
