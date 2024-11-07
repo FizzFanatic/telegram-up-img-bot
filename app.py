@@ -75,6 +75,13 @@ def handle_enhance_photo(call):
         result_message = upscaling_image.process_image(message, bot)
         bot.reply_to(message, result_message)
 
+
+# Обработчик callback-запросов
+@bot.callback_query_handler(func=lambda call: call.data == "back_to_menu")
+def back_to_menu(call):
+    bot.send_message(call.message.chat.id, "Главное меню", reply_markup=keyboard.create_main_menu())
+
+
 # # Запуск приложения
 # if __name__ == "__main__":
 #     app.run()
