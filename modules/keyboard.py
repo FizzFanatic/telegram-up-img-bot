@@ -9,10 +9,13 @@ def create_main_menu():
     markup.add(button1, button2, button3)
     return markup
 
-# Функция для создания кнопок в inline-режиме (если нужно)
-def create_inline_buttons():
+# Функция для создания кнопок в inline-режиме
+def create_inline_tools_buttons():
     markup = types.InlineKeyboardMarkup()
-    button1 = types.InlineKeyboardButton("Подробнее", callback_data="details")
-    button2 = types.InlineKeyboardButton("Обновить", callback_data="update")
-    markup.add(button1, button2)
+
+    button1 = types.InlineKeyboardButton("Улучшить фото", callback_data="enhance_photo")
+    button2 = types.InlineKeyboardButton("Удалить метаданные", callback_data="remove_metadata")
+    button3 = types.InlineKeyboardButton("Водяной знак", callback_data="add_watermark")
+
+    markup.add(button1, button2, button3)
     return markup

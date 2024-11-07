@@ -36,6 +36,14 @@ def show_account_info(message):
         bot.reply_to(message, "Ошибка при получении данных о балансе.", reply_markup=keyboard.create_main_menu())
 
 
+# Обработчик кнопки "Tools"
+@bot.message_handler(func=lambda message: message.text == "Tools")
+def tools_button(message):
+    message_text = "Выберите инструмент:"
+    bot.reply_to(message, message_text,
+                 reply_markup=keyboard.create_inline_tools_buttons()) # клавиатура с инструментами
+
+
 # Обработка вебхука от Telegram
 @app.route(f'/webhook_update/{config.SECRET_PATH}', methods=['POST'])
 def webhook():
