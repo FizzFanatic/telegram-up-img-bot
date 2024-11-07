@@ -71,6 +71,9 @@ def handle_enhance_photo(call):
     # После того как фото будет отправлено, вызываем обработчик
     @bot.message_handler(content_types=['photo'])
     def get_photo_and_process(message):
+        message_text = "Обработка началась, с вас списано 5 кредитов"
+        bot.reply_to(message, message_text)
+
         # Вызываем функцию для обработки фото
         result_message = upscaling_image.process_image(message, bot)
         bot.reply_to(message, result_message)
