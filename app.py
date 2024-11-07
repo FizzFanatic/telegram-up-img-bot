@@ -40,9 +40,16 @@ def show_account_info(message):
 # Обработчик кнопки "Tools"
 @bot.message_handler(func=lambda message: message.text == "Tools")
 def tools_button(message):
-    message_text = "💸 Цены на услуги:\n\nУлучшение фото: 3 кредита\nУдаление метаданных: 1 кредит\nДобавление водяного знака: 1 кредит\n\nВыберите инструмент:"
+    message_text = "Цены на услуги:\n\nУлучшение фото: 3 кредита\nУдаление метаданных: 1 кредит\nДобавление водяного знака: 1 кредит\n\nВыберите инструмент:"
     bot.reply_to(message, message_text,
                  reply_markup=keyboard.create_inline_tools_buttons()) # клавиатура с инструментами
+
+
+# Обработчик кнопки "About"
+@bot.message_handler(func=lambda message: message.text == "О боте")
+def about_button(message):
+    message_text = "О боте, раздел в доработке."
+    bot.reply_to(message, message_text)
 
 
 # Обработка вебхука от Telegram
