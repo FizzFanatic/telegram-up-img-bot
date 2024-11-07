@@ -5,6 +5,7 @@ import config  # файл конфигурации с настройками
 import database
 
 from modules import keyboard
+from tools import upscaling_image
 
 # Инициализация бота
 bot = telebot.TeleBot(config.Token, threaded=False)
@@ -60,6 +61,19 @@ def webhook():
     print("WebHook получен")  # Проверка на получение запроса
     return 'ok', 200
 
+
+# Обработчик callback-запросов
+@bot.callback_query_handler(func=lambda call: call.data == "enhance_photo")
+def handle_enhance_photo(call):
+    # Запрашиваем пользователя отправить фото
+    bot.send_message(call.message.chat.id, "Пожалуйста, отправьте фото для улучшения. Форматы: PNG, JPG.")
+
+    # После того как фото будет отправлено, вызываем обработчик
+    @bot.message_handler(content_types=['photo'])
+    def get_photo_and_process(message):
+        # Вызываем функцию для обработки фото
+        result_message = upscaling_image.process_image(message, bot)
+        bot.reply_to(message, result_message)
 
 # # Запуск приложения
 # if __name__ == "__main__":
