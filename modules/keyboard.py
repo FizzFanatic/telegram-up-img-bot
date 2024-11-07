@@ -9,6 +9,7 @@ def create_main_menu():
     markup.add(button1, button2, button3)
     return markup
 
+
 # Функция для создания кнопок в inline-режиме
 def create_inline_tools_buttons():
     markup = types.InlineKeyboardMarkup()
@@ -17,5 +18,10 @@ def create_inline_tools_buttons():
     button2 = types.InlineKeyboardButton("Удалить метаданные", callback_data="remove_metadata")
     button3 = types.InlineKeyboardButton("Водяной знак", callback_data="add_watermark")
 
-    markup.add(button1, button2, button3)
+    # Добавляем каждую кнопку отдельно, чтобы они шли вертикально
+    markup.add(button1)
+    markup.add(button2)
+    markup.add(button3)
+
     return markup
+
