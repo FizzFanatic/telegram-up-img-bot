@@ -28,8 +28,9 @@ class ILoveIMG:
             print("Ошибка при старте задачи")
 
     def upload(self, input_file):
-        with open(input_file, 'rb') as f:
-            response = requests.post(self.url + 'upload', data={'task': self.task}, headers=self.headers, files={'file': f})
+        # Отправляем файл сразу на сервер, не сохраняя его локально
+        files = {'file': input_file}
+        response = requests.post(self.url + 'upload', data={'task': self.task}, headers=self.headers, files=files)
         if response.status_code == 200:
             return response.json()['server_filename']
         else:

@@ -3,8 +3,7 @@ from flask import Flask, request
 
 import config  # файл конфигурации с настройками
 import database
-
-
+from io import BytesIO
 
 from modules import keyboard
 from tools import upscaling_image, iloveapi_upscale_image
@@ -87,18 +86,13 @@ def handle_photo(message):
     file_info = bot.get_file(message.photo[-1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
 
-    # Сохраняем файл на диск
-    input_file_path = f'./downloads/{message.from_user.id}_input.jpg'
-    with open(input_file_path, 'wb') as new_file:
-        new_file.write(downloaded_file)
-
     # Создаем экземпляр API ILoveIMG
     iloveimg = iloveapi_upscale_image.ILoveIMG(public_key=config.PUBLIC_KEY_I_LOVE_API)
     iloveimg.auth()  # Аутентификация
     iloveimg.start()  # Старт задачи
 
     # Загружаем файл на сервер ILoveIMG
-    server_filename = iloveimg.upload(input_file_path)
+    server_filename = iloveimg.upload(BytesIO(downloaded_file))  # Используем байтовый поток
     if server_filename:
         # Обрабатываем файл
         status = iloveimg.process(server_filename, upscale_multiplier=2)
