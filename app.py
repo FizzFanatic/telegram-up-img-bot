@@ -4,8 +4,10 @@ from flask import Flask, request
 import config  # файл конфигурации с настройками
 import database
 
+
+
 from modules import keyboard
-from tools import upscaling_image
+from tools import upscaling_image, iloveapi_upscale_image
 
 # Инициализация бота
 bot = telebot.TeleBot(config.Token, threaded=False)
@@ -79,12 +81,41 @@ def handle_enhance_photo(call):
     bot.send_message(call.message.chat.id, message_text, reply_markup=keyboard.create_inline_upscaling_foto_buttons())
 
 
-
-# После того как фото будет отправлено, вызываем обработчик
 @bot.message_handler(content_types=['photo'])
-def get_photo_and_process(message):
-    message_text = "Обработка началась, с вас списано 5 кредитов"
-    bot.reply_to(message, message_text)
+def handle_photo(message):
+    # Загружаем фото, отправленное пользователем
+    file_info = bot.get_file(message.photo[-1].file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+
+    # Сохраняем файл на диск
+    input_file_path = f'./downloads/{message.from_user.id}_input.jpg'
+    with open(input_file_path, 'wb') as new_file:
+        new_file.write(downloaded_file)
+
+    # Создаем экземпляр API ILoveIMG
+    iloveimg = iloveapi_upscale_image.ILoveIMG(public_key=config.PUBLIC_KEY_I_LOVE_API)
+    iloveimg.auth()  # Аутентификация
+    iloveimg.start()  # Старт задачи
+
+    # Загружаем файл на сервер ILoveIMG
+    server_filename = iloveimg.upload(input_file_path)
+    if server_filename:
+        # Обрабатываем файл
+        status = iloveimg.process(server_filename, upscale_multiplier=2)
+        if status == "ok":
+            # Загружаем улучшенное изображение
+            enhanced_image = iloveimg.download()
+
+            # Отправляем улучшенное изображение пользователю как файл
+            if enhanced_image:
+                bot.send_document(message.chat.id, enhanced_image, caption="Ваше улучшенное изображение", filename="upscaled_image.jpg")
+            else:
+                bot.send_message(message.chat.id, "Не удалось скачать улучшенное изображение.")
+        else:
+            bot.send_message(message.chat.id, "Ошибка при обработке изображения.")
+    else:
+        bot.send_message(message.chat.id, "Ошибка при загрузке изображения на сервер.")
+
 
 
 # Обработчик callback-запросов
