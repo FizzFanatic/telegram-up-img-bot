@@ -17,8 +17,10 @@ status = ''
 def auth():
     global token, headers
     response = requests.post(url + 'auth', data={'public_key': config.PUBLIC_KEY_I_LOVE_API})
+    print(f"Status code: {response.status_code}")
     if response.status_code == 200:
         token = response.json()['token']
+        print(f"Token: {token}")
         headers = {'Authorization': 'Bearer ' + token}
     else:
         print("Ошибка при аутентификации")
@@ -29,6 +31,7 @@ def start(tool="upscaleimage"):
     response = requests.get(url + f'start/{tool}', headers=headers)
     if response.status_code == 200:
         task = response.json()['task']
+        print(f"Task: {task}")
     else:
         print("Ошибка при старте задачи")
 
@@ -37,6 +40,7 @@ def upload(file_data):
     global server_filename
     files = {'file': file_data}
     response = requests.post(url + 'upload', data={'task': task}, headers=headers, files=files)
+    print(f"Upload status: {response.status_code}")
     if response.status_code == 200:
         server_filename = response.json()['server_filename']
     else:
