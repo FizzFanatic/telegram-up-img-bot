@@ -66,17 +66,25 @@ def webhook():
 @bot.callback_query_handler(func=lambda call: call.data == "enhance_photo")
 def handle_enhance_photo(call):
     # Запрашиваем пользователя отправить фото
-    bot.send_message(call.message.chat.id, "Пожалуйста, отправьте фото для улучшения. Форматы: PNG, JPG.")
+    # bot.send_message(call.message.chat.id, "Пожалуйста, отправьте фото для улучшения. Форматы: PNG, JPG.")
 
-    # После того как фото будет отправлено, вызываем обработчик
-    @bot.message_handler(content_types=['photo'])
-    def get_photo_and_process(message):
-        message_text = "Обработка началась, с вас списано 5 кредитов"
-        bot.reply_to(message, message_text)
+    # Удаляем предыдущее сообщение
+    bot.delete_message(call.message.chat.id, call.message.message_id)
 
-        # Вызываем функцию для обработки фото
-        result_message = upscaling_image.process_image(message, bot)
-        bot.reply_to(message, result_message)
+    message_text = ("Улучшение качества фото\n\n"
+                    "Мы используем передовой API для повышения качества ваших фотографий.\n\n"
+                    "Стоимость услуги: 5 кредитов\n\n"
+                    "Если вы хотите улучшить фото, нажмите кнопку «Улучшить». В случае успешного завершения операции с вашего баланса будет списано 5 кредитов.")
+
+    bot.send_message(call.message.chat.id, message_text, reply_markup=keyboard.create_inline_upscaling_foto_buttons())
+
+
+
+# После того как фото будет отправлено, вызываем обработчик
+@bot.message_handler(content_types=['photo'])
+def get_photo_and_process(message):
+    message_text = "Обработка началась, с вас списано 5 кредитов"
+    bot.reply_to(message, message_text)
 
 
 # Обработчик callback-запросов
