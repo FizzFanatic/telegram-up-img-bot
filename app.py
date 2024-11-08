@@ -86,29 +86,18 @@ def handle_photo(message):
     file_info = bot.get_file(message.photo[-1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
 
-    # Создаем экземпляр API ILoveIMG
-    iloveimg = iloveapi_upscale_image.ILoveIMG(public_key=config.PUBLIC_KEY_I_LOVE_API)
-    iloveimg.auth()  # Аутентификация
-    iloveimg.start()  # Старт задачи
+    # Преобразуем фото в BytesIO объект для передачи в API
+    file_data = BytesIO(downloaded_file)
 
-    # Загружаем файл на сервер ILoveIMG
-    server_filename = iloveimg.upload(BytesIO(downloaded_file))  # Используем байтовый поток
-    if server_filename:
-        # Обрабатываем файл
-        status = iloveimg.process(server_filename, upscale_multiplier=2)
-        if status == "ok":
-            # Загружаем улучшенное изображение
-            enhanced_image = iloveimg.download()
+    # Отправляем фото на обработку
+    enhanced_image = iloveapi_upscale_image.execute(file_data)
 
-            # Отправляем улучшенное изображение пользователю как файл
-            if enhanced_image:
-                bot.send_document(message.chat.id, enhanced_image, caption="Ваше улучшенное изображение", filename="upscaled_image.jpg")
-            else:
-                bot.send_message(message.chat.id, "Не удалось скачать улучшенное изображение.")
-        else:
-            bot.send_message(message.chat.id, "Ошибка при обработке изображения.")
+    if enhanced_image:
+        # Отправляем улучшенное изображение обратно пользователю
+        bot.send_document(message.chat.id, enhanced_image, caption="Ваше улучшенное изображение",
+                          filename="upscaled_image.jpg")
     else:
-        bot.send_message(message.chat.id, "Ошибка при загрузке изображения на сервер.")
+        bot.send_message(message.chat.id, "Не удалось улучшить изображение.")
 
 
 
